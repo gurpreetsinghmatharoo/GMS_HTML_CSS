@@ -11,4 +11,12 @@ with (oHTMLController) {
 	
 	arr[PR.CLASS] = _class;
 	arr[PR.ID] = _id;
+	
+	// Get style
+	// ID
+	
+	
+	
+	// Add
+	ds_list_add(elements, arr);
 }

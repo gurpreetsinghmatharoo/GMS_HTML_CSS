@@ -6,17 +6,17 @@
 var _class = argument[0];
 var _id = argument[1];
 
+// Log
+show_debug_message("Reading style for class: " + _class + ", id: " + _id);
+
 // Map
 var map = ds_map_create();
 
 // Read
 var first_arg = 2;
 for (var i=first_arg; i<argument_count; i++) {
-	// Style index
-	var s = i-first_arg;
-	
 	// Get
-	var _style = argument[2];
+	var _style = argument[i];
 	
 	// Format
 	_style = string_replace_all(_style, ";", "");
@@ -35,25 +35,56 @@ for (var i=first_arg; i<argument_count; i++) {
 	
 	// Get value
 	var val_pos = colon_pos+1;
-	var value = string_copy(_style, val_pos, string_length(_style)-val_pos);
+	var value = string_copy(_style, val_pos, string_length(_style)-colon_pos);
 	
 	// Log
-	show_debug_message("Style found: " + property + ": " + string(value));
+	show_debug_message("Style found: " + property + ": " + value);
+	
+	// Parse pixel size
+	if (string_pos("px", value)) {
+		value = string_replace(value, "px", "");
+		value = real(string_digits(value));
+	}
+	// Parse percent size
+	else if (string_pos("%", value)) {
+		value = real(string_digits(value));
+		
+		// Dimension
+		var size;
+		
+		switch (property) {
+			case "left": case "right": case "width":
+				size = global.screenWidth;
+			break;
+			
+			default:
+				size = global.screenHeight;
+			break;
+		}
+		
+		// Multiply
+		value = size * (value/100);
+	}
+	
+	// Log
+	show_debug_message("Style parsed: " + property + ": " + string(value));
 	
 	// Map
-	
+	map[? property] = value;
 }
 
 // Add
 if (ds_map_size(map)) {
-	// Using ID
-	var par_map = global.CSS_Ids;
-	var key = _id;
+	var par_map, key;
 	
 	// Using Class
-	if (string_length(_class)) {
-		par_map = global.CSS_Classes;
-		key = _class;
+	par_map = global.CSS_Classes;
+	key = _class;
+	
+	// Using ID
+	if (string_length(_id)) {
+		par_map = global.CSS_Ids;
+		key = _id;
 	}
 	
 	ds_map_add_map(par_map, key, map);
