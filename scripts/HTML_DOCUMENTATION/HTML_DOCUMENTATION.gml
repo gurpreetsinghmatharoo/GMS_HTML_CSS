@@ -2,7 +2,14 @@
 
 
 
+-- HTML --
+	Function: DIV()
 
+* You can set up divs wherever you want
+
+
+-- CSS --
+	Function: CSS()
 
 * CSS must be defined in a global script. You can do it in html_init <-- just middle click here
 
