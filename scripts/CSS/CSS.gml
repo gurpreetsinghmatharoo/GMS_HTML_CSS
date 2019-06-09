@@ -10,7 +10,10 @@ var _id = argument[1];
 show_debug_message("Reading style for class: " + _class + ", id: " + _id);
 
 // Map
-var map = ds_map_create();
+//var map = ds_map_create();
+
+// Array
+var styles = array_create(STYLE.END, undefined);
 
 // Read
 var first_arg = 2;
@@ -70,11 +73,16 @@ for (var i=first_arg; i<argument_count; i++) {
 	show_debug_message("Style parsed: " + property + ": " + string(value));
 	
 	// Map
-	map[? property] = value;
+	//map[? property] = value;
+	
+	// Add to array
+	var ind = html_indexOf(global.styleNames, property);
+	
+	if (ind) styles[ind] = value;
 }
 
 // Add
-if (ds_map_size(map)) {
+//if (ds_map_size(map)) {
 	var par_map, key;
 	
 	// Using Class
@@ -87,5 +95,5 @@ if (ds_map_size(map)) {
 		key = _id;
 	}
 	
-	ds_map_add_map(par_map, key, map);
-}
+	//ds_map_add_map(par_map, key, map);
+//}
